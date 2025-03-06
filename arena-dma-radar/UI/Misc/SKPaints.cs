@@ -458,6 +458,19 @@ namespace arena_dma_radar.UI.Misc
             Typeface = CustomFonts.SKFontFamilyMedium,
             FilterQuality = SKFilterQuality.High
         };
+
+        public static SKPaint TextBasicESPCenterAligned { get; } = new SKPaint()
+        {
+            SubpixelText = true,
+            Color = SKColors.White,
+            IsStroke = false,
+            TextSize = 12f,
+            TextAlign = SKTextAlign.Center,
+            TextEncoding = SKTextEncoding.Utf8,
+            IsAntialias = true,
+            Typeface = CustomFonts.SKFontFamilyMedium,
+            FilterQuality = SKFilterQuality.High
+        };
         #endregion
 
         #endregion

@@ -251,20 +251,68 @@ namespace arena_dma_radar.UI.ESP
         {
             var mag = localPlayer.Firearm.Magazine;
             string counter;
+            float fillPercentage = 0f;
+
             if (mag.IsValid)
+            {
                 counter = $"{mag.Count} / {mag.MaxCount}";
+                fillPercentage = (float)mag.Count / mag.MaxCount;
+            }
             else
+            {
                 counter = "-- / --";
-            float textWidth = SKPaints.TextMagazineESP.MeasureText(counter);
-            string wepInfo = mag.WeaponInfo;
+            }
+
+            float barWidth = 170f;
+            float barHeight = 20f;
+            float screenWidth = CameraManagerBase.Viewport.Width;
+            float screenHeight = CameraManagerBase.Viewport.Height;
+
+            float x = (screenWidth - barWidth) / 2;
+            float y = screenHeight - 200;
+
+            SKRect backgroundRect = new SKRect(x, y, x + barWidth, y + barHeight);
+
+            // Create background paint (semi-transparent gray)
+            using (var backgroundPaint = new SKPaint
+            {
+                Color = new SKColor(1, 1, 1, 200), // Semi-transparent black
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
+            })
+            {
+                canvas.DrawRect(backgroundRect, backgroundPaint);
+            }
+
+            // Interpolating color from green (full) to red (empty)
+            var magColor = new SKColor(
+                (byte)(255 * (1 - fillPercentage)),  // Red increases as mag depletes
+                (byte)(255 * fillPercentage),        // Green decreases as mag depletes
+                0, 200);                             // No blue, full alpha
+
+            using (var magPaint = new SKPaint
+            {
+                Color = magColor,
+                Style = SKPaintStyle.Fill,
+                IsAntialias = true
+            })
+            {
+                var fillRect = new SKRect(x, y, x + barWidth * fillPercentage, y + barHeight);
+                canvas.DrawRect(fillRect, magPaint);
+            }
+
+            // Draw Counter in the center
+            float textX = x + barWidth / 2;
+            float textY = y + barHeight / 2 + SKPaints.TextBasicESPCenterAligned.TextSize / 3;
+            canvas.DrawText(counter, textX, textY, SKPaints.TextBasicESPCenterAligned);
+
+            // Draw Weapon Info Below
+            var wepInfo = mag.WeaponInfo;
             if (wepInfo is not null)
-                textWidth = Math.Max(textWidth, SKPaints.TextMagazineInfoESP.MeasureText(wepInfo));
-            float textHeight = SKPaints.TextMagazineESP.FontSpacing + SKPaints.TextMagazineInfoESP.FontSpacing;
-            float x = CameraManagerBase.Viewport.Width - textWidth - (15f * Config.ESP.FontScale);
-            float y = CameraManagerBase.Viewport.Height - (CameraManagerBase.Viewport.Height * 0.10f) - textHeight + (4f * Config.ESP.FontScale);
-            if (wepInfo is not null)
-                canvas.DrawText(wepInfo, x, y, SKPaints.TextMagazineInfoESP); // Draw Weapon Info
-            canvas.DrawText(counter, x, y + ((SKPaints.TextMagazineESP.FontSpacing - SKPaints.TextMagazineInfoESP.FontSpacing) + 6f * Config.ESP.FontScale), SKPaints.TextMagazineESP); // Draw Counter
+            {
+                float infoY = y + barHeight + SKPaints.TextBasicESPCenterAligned.TextSize + 5;
+                canvas.DrawText(wepInfo, textX, infoY, SKPaints.TextBasicESPCenterAligned);
+            }
         }
 
         /// <summary>
