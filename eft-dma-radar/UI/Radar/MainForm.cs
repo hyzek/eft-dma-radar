@@ -31,6 +31,7 @@ using static eft_dma_radar.UI.Hotkeys.HotkeyManager;
 using static eft_dma_radar.UI.Hotkeys.HotkeyManager.HotkeyActionController;
 using Timer = System.Timers.Timer;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using eft_dma_shared.Common.Features.MemoryWrites;
 
 namespace eft_dma_radar.UI.Radar
 {
@@ -55,6 +56,8 @@ namespace eft_dma_radar.UI.Radar
         private Vector2 _mapPanPosition;
         private EspWidget _aimview;
         private PlayerInfoWidget _playerInfo;
+        private LootInfoWidget _lootInfo;
+
 
         /// <summary>
         /// Main UI/Application Config.
@@ -244,6 +247,8 @@ namespace eft_dma_radar.UI.Radar
             var inRaid = InRaid; // cache bool
             var localPlayer = LocalPlayer; // cache ref to current player
             var canvas = e.Surface.Canvas; // get Canvas reference to draw on
+            var mousePos = GetMousePosition(); // Implement this to track mouse position
+            var mouseClicked = CheckMouseClick();
             try
             {
                 SetFPS(inRaid);
@@ -401,6 +406,9 @@ namespace eft_dma_radar.UI.Radar
                         _playerInfo?.Draw(canvas, localPlayer, allPlayers);
                     closestToMouse?.DrawMouseover(canvas, mapParams, localPlayer);// draw tooltip for object the mouse is closest to
 
+                    if (checkBox_ShowLootTab.Checked) // Loot Overlay
+                        _lootInfo?.Draw(canvas, localPlayer, mousePos, mouseClicked);
+
                     if (Config.ESPWidgetEnabled)
                         _aimview?.Draw(canvas);
                 }
@@ -420,6 +428,19 @@ namespace eft_dma_radar.UI.Radar
             {
                 LoneLogging.WriteLine($"CRITICAL RENDER ERROR: {ex}");
             }
+        }
+
+        private SKPoint GetMousePosition()
+        {
+            var mouse = skglControl_Radar.PointToClient(Cursor.Position);
+            float dpiScaleX = skglControl_Radar.Width / (float)skglControl_Radar.ClientSize.Width;
+            float dpiScaleY = skglControl_Radar.Height / (float)skglControl_Radar.ClientSize.Height;
+
+            return new SKPoint(mouse.X * dpiScaleX, mouse.Y * dpiScaleY);
+        }
+        private bool CheckMouseClick()
+        {
+            return (Control.MouseButtons & MouseButtons.Left) != 0;
         }
 
         private readonly Stopwatch _statusSw = Stopwatch.StartNew();
@@ -3558,6 +3579,18 @@ namespace eft_dma_radar.UI.Radar
                 FileName = updatesUrl,
                 UseShellExecute = true
             });
+        }
+
+        private void hideRaidcode_CheckedChanged(object sender, EventArgs e)
+        {
+            // Update config
+            Program.Config.MemWrites.HideRaidCode = hideRaidcode.Checked;
+
+            // Enable or disable the feature
+            MemPatchFeature<HideRaidCode>.Instance.Enabled = hideRaidcode.Checked;
+
+            // Apply the changes immediately
+            MemPatchFeature<HideRaidCode>.Instance.TryApply();
         }
     }
 }

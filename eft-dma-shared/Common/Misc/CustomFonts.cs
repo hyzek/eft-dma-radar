@@ -27,22 +27,22 @@ namespace eft_dma_shared.Common.Misc
             try
             {
                 byte[] fontFamilyRegular, fontFamilyBold, fontFamilyItalic, fontFamilyMedium;
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.NeoSansStdRegular.otf"))
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.Poppins-Regular.ttf"))
                 {
                     fontFamilyRegular = new byte[stream!.Length];
                     stream.ReadExactly(fontFamilyRegular);
                 }
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.NeoSansStdBold.otf"))
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.Poppins-Bold.ttf"))
                 {
                     fontFamilyBold = new byte[stream!.Length];
                     stream.ReadExactly(fontFamilyBold);
                 }
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.NeoSansStdItalic.otf"))
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.Poppins-Italic.ttf"))
                 {
                     fontFamilyItalic = new byte[stream!.Length];
                     stream.ReadExactly(fontFamilyItalic);
                 }
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.NeoSansStdMedium.otf"))
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("eft-dma-shared.Poppins-Medium.ttf"))
                 {
                     fontFamilyMedium = new byte[stream!.Length];
                     stream.ReadExactly(fontFamilyMedium);

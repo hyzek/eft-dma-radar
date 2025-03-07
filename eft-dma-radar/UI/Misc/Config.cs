@@ -99,6 +99,11 @@ namespace eft_dma_radar.UI.Misc
         [JsonPropertyName("showInfoTab")]
         public bool ShowInfoTab { get; set; } = true;
 
+        /// Shows Loot Info Widget.
+        /// </summary>
+        [JsonPropertyName("showLootTab")]
+        public bool ShowLootTab { get; set; } = true;
+
         /// <summary>
         /// Shows bodies/corpses on map.
         /// </summary>
@@ -675,6 +680,12 @@ namespace eft_dma_radar.UI.Misc
         /// </summary>
         [JsonPropertyName("antiPage")]
         public bool AntiPage { get; set; } = false;
+
+        /// <summary>
+        /// Hides Raid Code from the game.
+        /// </summary>
+        [JsonPropertyName("hideRaidCode")]
+        public bool HideRaidCode { get; set; } = false;
 
         /// <summary>
         /// Enable No Recoil Feature on Startup.
