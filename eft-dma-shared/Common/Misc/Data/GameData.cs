@@ -34,7 +34,8 @@ namespace eft_dma_shared.Common.Misc.Data
             ["Arena_Bay5"] = "Bay 5",
             ["Arena_AutoService"] = "Chop Shop",
             ["Arena_Yard"] = "Yard",
-            ["Arena_Prison"] = "Fort"
+            ["Arena_Prison"] = "Fort",
+            ["Labyrinth"] = "The Labyrinth",
         }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
@@ -252,6 +253,11 @@ namespace eft_dma_shared.Common.Misc.Data
                 ["Scav Checkpoint (Co-Op)"] = "Scav Checkpoint (Co-Op)",
                 ["Emercom Checkpoint"] = "Emercom Checkpoint",
                 ["Nakatani Basement Stairs"] = "Nakatani Basement Stairs",
+            }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase) },
+            { "Labyrinth", new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["labir_exit"] = "The Way Up",
+                ["labyrinth_secret_tagilla_key"] = " Aridane's Path",
             }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase) },
         }.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
 
